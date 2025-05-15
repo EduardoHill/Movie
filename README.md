@@ -1,6 +1,6 @@
 # 🏠 Movie App
 
-![Preview do site](./src/imagens/image.png)
+![Preview do site](/src/imagens/image.png)
 
 ## 👋 Seja bem-vindo
 
