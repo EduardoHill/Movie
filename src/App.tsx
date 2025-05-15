@@ -1,30 +1,70 @@
+import { useState } from 'react'
 import { Header } from './components/header'
 
+import ErrorIMG from '../src/imagens/ErrorIMG.png'
+
+const apiKey = import.meta.env.VITE_API_KEY_TMDB
+const baseUrl = 'https://api.themoviedb.org/3/movie'
+const imageURL = 'https://image.tmdb.org/t/p/w500/'
+
+type MovieProps = {
+  id: number
+  title: string
+  overview: string
+  poster_path: string
+  release_date: string
+}
+
 export function App() {
+  const [movie, setMovie] = useState<MovieProps>({} as MovieProps)
+  const id = Math.floor(Math.random() * 1000)
+
+  async function handlegetMovie() {
+    const response = await fetch(
+      `${baseUrl}/${id}?api_key=${apiKey}&language=pt-BR`
+    )
+    const data = await response.json()
+
+    setMovie(data)
+  }
+  const date = new Date(movie.release_date)
+
   return (
     <div className='min-h-screen flex flex-col gap-4'>
       <Header />
       <main className=' max-w-5xl w-full mx-auto px-5'>
         <div className='flex gap-3'>
-          <button className='bg-blue-400 text-white rounded-2xl px-4 font-medium cursor-pointer hover:bg-blue-700 transition-colors'>
+          <button
+            onClick={handlegetMovie}
+            className='bg-blue-400 text-white rounded-2xl px-4 font-medium cursor-pointer hover:bg-blue-700 transition-colors'
+          >
             Buscar
           </button>
         </div>
-        <div className='flex mt-10 gap-10'>
-          <img src='' alt='' className='w-full h-96 object-cover rounded-lg ' />
-          <div className='flex flex-col gap-10'>
-            <h2 className='text-3xl font-bold '>O senhor dos aneis</h2>
-            <p className='text-zinc-800'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
-              eius maiores magnam explicabo libero dolorum omnis dignissimos, ab
-              ratione asperiores! Vero tempora expedita corrupti? Beatae aliquid
-              aspernatur expedita illum ut!
-            </p>
-            <p className='bg-blue-700 text-white w-fit px-3 rounded-3xl'>
-              Data de lançamento : 2023
-            </p>
+        {movie.id ? (
+          <div className='flex mt-10 gap-10 md:flex-row flex-col'>
+            <img
+              src={imageURL + movie.poster_path}
+              alt='imagen de capa do filme'
+              className='w-80 h-96 object-cover rounded-lg '
+            />
+            <div className='flex flex-col gap-10'>
+              <h2 className='text-3xl font-bold '>{movie.title}</h2>
+              <p className='text-zinc-800'>{movie.overview}</p>
+              <p className='bg-blue-700 text-white w-fit px-3 rounded-3xl'>
+                Data de lançamento : {movie.release_date}
+              </p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div>
+            <img
+              className='w-80 h-96  rounded-lg mt-5 '
+              src={ErrorIMG}
+              alt=''
+            />
+          </div>
+        )}
       </main>
     </div>
   )
