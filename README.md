@@ -1,4 +1,4 @@
-# 🏠 Ecommerce
+# 🏠 Movie App
 
 ![Preview do site](./src/imagens/image.png)
 
