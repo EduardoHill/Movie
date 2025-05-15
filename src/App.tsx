@@ -27,7 +27,6 @@ export function App() {
 
     setMovie(data)
   }
-  const date = new Date(movie.release_date)
 
   return (
     <div className='min-h-screen flex flex-col gap-4'>
