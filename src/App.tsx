@@ -4,7 +4,7 @@ import { Header } from './components/header'
 import ErrorIMG from '../src/imagens/ErrorIMG.png'
 
 const apiKey = import.meta.env.VITE_API_KEY_TMDB
-const baseUrl = 'https://api.themoviedb.org/3/movie'
+const baseUrl = 'https://api.themoviedb.org/3/movie/popular'
 const imageURL = 'https://image.tmdb.org/t/p/w500/'
 
 type MovieProps = {
@@ -17,15 +17,18 @@ type MovieProps = {
 
 export function App() {
   const [movie, setMovie] = useState<MovieProps>({} as MovieProps)
-  const id = Math.floor(Math.random() * 1000)
+  const id = Math.floor(Math.random() * 10) + 1
 
   async function handlegetMovie() {
     const response = await fetch(
-      `${baseUrl}/${id}?api_key=${apiKey}&language=pt-BR`
+      `${baseUrl}?api_key=${apiKey}&language=pt-BR&page=${id}`
     )
     const data = await response.json()
 
-    setMovie(data)
+    const movies: MovieProps[] = data.results
+    const randomMovie = movies[Math.floor(Math.random() * movies.length)]
+
+    setMovie(randomMovie)
   }
 
   return (
@@ -45,7 +48,7 @@ export function App() {
             <img
               src={imageURL + movie.poster_path}
               alt='imagen de capa do filme'
-              className='w-80 h-96 object-cover rounded-lg '
+              className='w-80 h-96  rounded-lg '
             />
             <div className='flex flex-col gap-10'>
               <h2 className='text-3xl font-bold '>{movie.title}</h2>
